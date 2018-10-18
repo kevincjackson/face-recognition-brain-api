@@ -43,9 +43,9 @@ app.post('/signin', (req, res) => {
     req.body.email === database.users[0].email &&
     req.body.password == database.users[0].password
   ) {
-    res.json('success');
+    res.json(database.users[0]);
   } else {
-    res.status(400).json('error logging in');
+    res.status(400).json('Server response: invalid signin');
   }
 });
 
@@ -90,7 +90,7 @@ app.put('/image', (req, res) => {
       return res.json(user.entries);
     }
   });
-  res.status(400).json('User not found');
+  return res.status(400).json('User not found');
 });
 
 // Start server
