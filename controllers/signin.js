@@ -1,14 +1,18 @@
-const handleSignin = (req, res, db, bcrypt) => {
+const handleSignin = (db, bcrypt) => (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json("Missing required fields.");
+  }
   db.select("email", "hash")
     .from("login")
-    .where("email", "=", req.body.email)
+    .where("email", "=", email)
     .then(login => {
-      const isValid = bcrypt.compareSync(req.body.password, login[0].hash);
+      const isValid = bcrypt.compareSync(password, login[0].hash);
       if (isValid) {
         return db
           .select("*")
           .from("users")
-          .where("email", "=", req.body.email)
+          .where("email", "=", email)
           .then(user => {
             res.json(user[0]);
           })
@@ -20,4 +24,4 @@ const handleSignin = (req, res, db, bcrypt) => {
     .catch(err => res.status(400).json("Wrong credentials."));
 };
 
-module.exports = { handleSignin: handleSignin };
+module.exports = { handleSignin };

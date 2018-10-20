@@ -1,4 +1,4 @@
-const handleProfile = (req, res, db) => {
+const handleProfile = db => (req, res) => {
   const { id } = req.params;
   let found = false;
   db.select("*")
@@ -14,4 +14,4 @@ const handleProfile = (req, res, db) => {
     .catch(err => res.status(400).json("Error getting user."));
 };
 
-module.exports = { handleProfile: handleProfile };
+module.exports = { handleProfile };

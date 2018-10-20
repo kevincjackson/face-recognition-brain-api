@@ -1,5 +1,8 @@
-const handleRegister = (req, res, db, bcrypt) => {
+const handleRegister = (db, bcrypt) => (req, res) => {
   const { email, name, password } = req.body;
+  if (!email || !name || !password) {
+    return res.status(404).json("Missing required fields.");
+  }
   const hash = bcrypt.hashSync(password);
   db.transaction(trx => {
     trx
@@ -26,6 +29,4 @@ const handleRegister = (req, res, db, bcrypt) => {
   }).catch(err => res.status(400).json("Unable to register."));
 };
 
-module.exports = {
-  handleRegister: handleRegister
-};
+module.exports = { handleRegister };
